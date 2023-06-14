@@ -2,9 +2,6 @@ const HEIGHT = 960;
 const WIDTH = 960;
 const grid = document.querySelector('.grid');
 
-buildGrid(16);
-applyPaintListener('mouseover');
-
 // Draw a num x num grid of divs
 function buildGrid(num) {
 
@@ -30,21 +27,62 @@ function buildGrid(num) {
 
 // Callback function on 'mouseover' event of "cell" divs
 function paintCell(e) {
-
-    // TODO: implement click-and-drag painting
-
     this.classList.add('paint');
 }
 
-// Reapply listeners - called again when redrawing grid
-function applyPaintListener(eventType) {
+// Modify event listeners on each cell
+function modifyPaintListener(add = true) {
     const rows = grid.querySelectorAll('.row');
-    console.log(rows);
 
     rows.forEach( (row) => {
         const cells = row.querySelectorAll('.cell');
         cells.forEach( cell => {
-            cell.addEventListener(eventType, paintCell);
+            if (add)
+                cell.addEventListener('mouseover', paintCell);
+            else
+                cell.removeEventListener('mouseover', paintCell);
         })
     })
 }
+
+// Check for mouse click and add 'mouseover' event listener until 'mouseup'
+function checkDrag() {
+    window.addEventListener('mousedown', (e) => {
+
+        if (e.target.className == 'cell') {
+            // Add 'mouseover' event listeners on click
+            modifyPaintListener(true);
+            console.log(e);
+        }
+        
+
+        // Add event listener for 'mouseup' to remove 'mouseover' event listeners
+        window.addEventListener('mouseup', (e) => {
+            modifyPaintListener(false);
+        })
+    })
+}
+
+// "main" script
+
+// initialize
+buildGrid(16);
+checkDrag();
+
+const adjustGrid = document.querySelector(".adjust-grid");
+adjustGrid.addEventListener('click', () => {
+    let newSize = prompt("Number of squares per side (max: 100): ");
+
+    // Check to see that they entered something
+    if(newSize != null) {
+        
+        if (newSize <= 100) {
+
+            grid.replaceChildren();
+            buildGrid(newSize);
+        }
+        else {
+            alert("Exceeded maximum input!");
+        }
+    }
+})
