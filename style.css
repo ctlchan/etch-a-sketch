@@ -38,3 +38,23 @@
     padding: 8px 30px;
     margin-top: 16px;
 }
+
+.colour-grid {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.colour {
+    height: 30px;
+    width: 30px;
+    border: 1px black solid;
+    transition: all 0.2s ease;
+}
+
+.selected-colour {
+    height: 35px;
+    width: 35px;
+    box-shadow: 10px;
+}

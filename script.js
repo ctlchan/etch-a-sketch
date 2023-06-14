@@ -25,13 +25,26 @@ function buildGrid(num) {
 
 }
 
+function getSelected() {
+    let selected;
+    let i = 0;
+    while (i < colours.length && colours[i].classList.length < 3) 
+        i++;
+    
+
+    selected = colours[i].classList[1];
+
+    return selected;
+}
+
 // Callback function on 'mouseover' event of "cell" divs
 function paintCell(e) {
-    this.classList.add('paint');
+    const colour = getSelected();
+    e.target.style.backgroundColor = colour;
 }
 
 // Modify event listeners on each cell
-function modifyPaintListener(add = true) {
+function modifyPaintListener(add = true, ...colour) {
     const rows = grid.querySelectorAll('.row');
 
     rows.forEach( (row) => {
@@ -50,6 +63,12 @@ function checkDrag() {
     window.addEventListener('mousedown', (e) => {
 
         if (e.target.className == 'cell') {
+
+            let selected = getSelected();
+
+            // paint AT LEAST the target cell
+            e.target.style.backgroundColor = selected;
+
             // Add 'mouseover' event listeners on click
             modifyPaintListener(true);
             console.log(e);
@@ -63,19 +82,12 @@ function checkDrag() {
     })
 }
 
-// "main" script
-
-// initialize
-buildGrid(16);
-checkDrag();
-
-const adjustGrid = document.querySelector(".adjust-grid");
-adjustGrid.addEventListener('click', () => {
+function alterGrid() {
     let newSize = prompt("Number of squares per side (max: 100): ");
 
     // Check to see that they entered something
     if(newSize != null) {
-        
+
         if (newSize <= 100) {
 
             grid.replaceChildren();
@@ -85,4 +97,34 @@ adjustGrid.addEventListener('click', () => {
             alert("Exceeded maximum input!");
         }
     }
+}
+
+function colourSelect(e) {
+
+    colours.forEach ((colour) => {
+        colour.classList.remove('selected-colour');
+    })
+
+    e.target.classList.add('selected-colour');
+    const rules = document.styleSheets[0].cssRules;
+    rules[5].style.backgroundColor = e.target.classList[1];
+
+}
+
+// "main" script
+
+// initialize
+buildGrid(16);
+checkDrag();
+
+const adjustGrid = document.querySelector(".adjust-grid");
+adjustGrid.addEventListener('click', alterGrid);
+
+const colours = document.querySelectorAll(".colour");
+colours.forEach( (btn) => {
+    btn.style.backgroundColor = btn.classList[1];
+
+    btn.addEventListener('click', colourSelect);
 })
+
+
