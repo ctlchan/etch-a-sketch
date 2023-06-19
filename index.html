@@ -5,7 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <script src="./script.js" defer></script>
     <title>Etch-a-Sketch</title>
 </head>
 <body>
@@ -26,10 +25,38 @@
                     <div class="colour purple"></div>
                 </div>
             </div>
+            <button class="export-img">export</button>
         </div>
         
         <div class="grid"></div>
+
+        <div class="confirm-download">
+            <form class="download-form">
+                <h1>Confirmation</h1>
+                <div class="input">
+                    <label for="file-name">File name: </label>
+                    <input id = "file-name" type="text" placeholder="Enter the desired file name" name="file-name" required>
+                </div>
+                
+                <div class="input">
+                    <label for="file-type">Save as type: </label>
+                    <select id="file-type" name="file-type">
+                        <option value="png">.png</option>
+                        <option value="jpeg">.jpeg</option>
+                    </select>
+                </div>
+                <div class="form-buttons">
+                    <button type="button" id='cancel' onclick="this.form.setAttribute('novalidate', 'novalidate')">Cancel</button>
+                    <button type="submit" id="save">Save</button>
+                </div>
+
+            </form>
+        </div>
     </div>
     
+
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+    <script src="./script.js" defer></script>
+
 </body>
 </html>

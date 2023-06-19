@@ -1,5 +1,5 @@
-const HEIGHT = 960;
-const WIDTH = 960;
+const HEIGHT = 780;
+const WIDTH = 780;
 const grid = document.querySelector('.grid');
 
 // Draw a num x num grid of divs
@@ -111,6 +111,50 @@ function colourSelect(e) {
 
 }
 
+function showConfirmationPopUp() {
+    const popUp = document.querySelector(".confirm-download");
+    popUp.style.visibility ="visible";
+
+    const cancel = document.querySelector('#cancel');
+    cancel.addEventListener('click', () => popUp.style.visibility = "hidden");
+
+    const save = document.querySelector('#save');
+    // const form = document.querySelector('.download-form');
+    save.addEventListener('click', (e) => {
+        e.preventDefault();  
+
+        let fileName = document.querySelector('#file-name').value;
+        let fileType = document.querySelector('#file-type').value;
+
+        console.log(fileName + ' ' + fileType);
+
+        if (fileName == '') {
+            alert("Invalid input(s). Please try again.")
+            console.error("invalid input");
+        }
+        else {
+            downloadURL(fileName, fileType)
+        }
+    })
+}
+
+function downloadURL(fileName, fileType) {
+
+    const toPrint = document.querySelector('.grid');
+
+    html2canvas(toPrint).then((canvas) => {
+
+        const imageURI = canvas.toDataURL(`image/${fileType}`);
+        const downloadLink = document.createElement("a");
+
+        downloadLink.download = fileName;
+        downloadLink.href = imageURI;
+        downloadLink.click();
+    })
+
+    return true;
+}
+
 // "main" script
 
 // initialize
@@ -126,5 +170,12 @@ colours.forEach( (btn) => {
 
     btn.addEventListener('click', colourSelect);
 })
+
+const exportBtn = document.querySelector(".export-img");
+
+exportBtn.addEventListener('click', (e) => {
+    showConfirmationPopUp();
+})
+
 
 
